@@ -1,4 +1,4 @@
-# 1. GML_NN: Librería de Redes Neuronales en C
+# GML_NN: Librería de Redes Neuronales en C
 
 [![Language](https://img.shields.io/badge/Language-C-blue.svg)](https://en.wikipedia.org/wiki/C_(programming_language))
 [![Environment](https://img.shields.io/badge/Environment-GNU/Linux-green.svg)](https://www.gnu.org/linux/)
@@ -15,7 +15,7 @@ Este repositorio incluye:
 
 ---
 
-## 2. Características Principales de GML_NN ✨
+## 1. Características Principales de GML_NN ✨
 
 * **Creación Flexible de Redes:** Permite definir arquitecturas MLP con un número arbitrario de capas y neuronas por capa.
 * **Entrenamiento Supervisado:** Implementa el algoritmo de **retropropagación** (`backpropagation`) para ajustar los pesos.
@@ -28,7 +28,7 @@ Este repositorio incluye:
 
 ---
 
-## 3. Arquitectura y Detalles Técnicos 🛠️
+## 2. Arquitectura y Detalles Técnicos 🛠️
 
 La librería está estructurada en torno a dos `struct` principales:
 
@@ -41,14 +41,14 @@ El **entrenamiento** se basa en el cálculo del gradiente del error respecto a c
 
 ---
 
-## 4. Módulos Auxiliares
+## 3. Módulos Auxiliares
 
 * **`matrix.h` / `matrix.c`**: Implementa una estructura `matrix` y operaciones fundamentales (creación, liberación, acceso, suma, resta, producto matricial, producto escalar) necesarias para el *feedforward* y *backpropagation*.
 * **`data_handler.h` / `data_handler.c`**: Facilita la carga de datos desde ficheros `.csv`, separación en conjuntos de entrada/salida, división en entrenamiento/prueba, barajado (Fisher-Yates), normalización (MinMax) y transformación de clases enteras a formato binario (*one-hot encoding* adaptado).
 
 ---
 
-## 5. Cómo Compilar y Ejecutar Ejemplos 🚀
+## 4. Cómo Compilar y Ejecutar Ejemplos 🚀
 
 La librería no tiene dependencias externas más allá del compilador C (gcc recomendado) y la librería matemática (`-lm`). Para compilar un ejemplo (ej. `xor.c`), puedes usar un `Makefile` similar al siguiente:
 
@@ -80,7 +80,7 @@ El repositorio incluye ejemplos prácticos:
 
 ---
 
-## 6. Resultados y Limitaciones 📊
+## 5. Resultados y Limitaciones 📊
 
 La librería demuestra ser capaz de resolver problemas de clasificación lineal y no lineal con éxito en varios conjuntos de datos, logrando tasas de acierto comparables a las de otras herramientas en los datasets de Diabetes y VIH.
 
@@ -93,7 +93,7 @@ Sin embargo, en el problema de reconocimiento de dígitos **MNIST**, el rendimie
 
 ---
 
-## 7. Futuras Líneas de Trabajo 🔮
+## 6. Futuras Líneas de Trabajo 🔮
 
 La memoria del TFG sugiere varias mejoras posibles:
 * Refactorizar el uso de punteros a funciones para optimizar el rendimiento.
