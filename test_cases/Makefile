@@ -1,16 +1,18 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -g
-LDFLAGS = -lm
+# Compila cualquier ejemplo contra la librería de src/ (una sola copia):
+#   make xor        make spiral        make diabetes_classifier
+#   make            (todos)            make clean
+CC       = gcc
+CFLAGS   = -Wall -Wextra -O2 -I../src
+LDLIBS   = -lm
+LIB      = ../src/matrix.c ../src/gml_nn.c ../src/data_handler.c
+EXAMPLES = $(basename $(wildcard *.c))
 
-SRC = matrix.c gml_nn.c data_handler.c mnist_load.c
-OBJ = $(SRC:.c=.o)
-TARGET = p
+all: $(EXAMPLES)
 
-$(TARGET): $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
-
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+%: %.c $(LIB)
+	$(CC) $(CFLAGS) -o $@ $< $(LIB) $(LDLIBS)
 
 clean:
-	rm -f $(OBJ) $(TARGET)
+	rm -f $(EXAMPLES)
+
+.PHONY: all clean

@@ -1,16 +1,17 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -g
-LDFLAGS = -lm
+# Compila la librería como estática: libgml_nn.a
+#   make            make clean
+# Uso desde un programa:  gcc -I<ruta>/src mi_programa.c -L<ruta>/src -lgml_nn -lm
+CC     = gcc
+CFLAGS = -Wall -Wextra -O2
+OBJ    = matrix.o gml_nn.o data_handler.o
 
-SRC = matrix.c gml_nn.c data_handler.c programa2.c
-OBJ = $(SRC:.c=.o)
-TARGET = p2
-
-$(TARGET): $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+libgml_nn.a: $(OBJ)
+	ar rcs $@ $^
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ) $(TARGET)
+	rm -f $(OBJ) libgml_nn.a
+
+.PHONY: clean

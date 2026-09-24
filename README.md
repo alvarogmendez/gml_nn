@@ -1,104 +1,114 @@
-# GML_NN: Librería de Redes Neuronales en C
+# GML_NN — a neural-network library in C
 
-[![Language](https://img.shields.io/badge/Language-C-blue.svg)](https://en.wikipedia.org/wiki/C_(programming_language))
-[![Environment](https://img.shields.io/badge/Environment-GNU/Linux-green.svg)](https://www.gnu.org/linux/)
+[![Language](https://img.shields.io/badge/language-C-blue.svg)](https://en.wikipedia.org/wiki/C_(programming_language))
+[![Platform](https://img.shields.io/badge/platform-GNU%2FLinux-green.svg)](https://www.gnu.org/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey.svg)](LICENSE)
 
-Este repositorio contiene **GML_NN**, una librería implementada desde cero en **C estándar** para la creación, entrenamiento y uso de **Redes Neuronales Artificiales** de tipo **Perceptrón Multicapa (MLP)**. El proyecto fue desarrollado como Trabajo Fin de Grado (TFG) en la Escuela Técnica Superior de Ingenieros Informáticos de la Universidad Politécnica de Madrid.
+**GML_NN** is a library written from scratch in **standard C**, with no dependencies beyond the
+maths library, to create, train and use **multilayer perceptrons (MLP)**. It is my Bachelor's
+thesis in Computer Engineering at the School of Computer Engineering (ETSIINF), Universidad
+Politécnica de Madrid — graded **9.6/10**.
 
-El objetivo principal es ofrecer una herramienta en C que permita describir, entrenar mediante **retropropagación** (`backpropagation`) y utilizar redes neuronales para resolver problemas de clasificación, predicción y reconocimiento de patrones.
+- 📄 **Thesis** (Spanish): theory from the perceptron to backpropagation, design decisions and
+  experiments — [UPM Digital Archive](https://oa.upm.es/82476/).
+- 📘 **User manuals** (Spanish) for `gml_nn.h`, `matrix.h` and `data_handler.h` in [`manual/`](manual/).
 
-### 📄 Documentación Detallada
+## Features
 
-Este repositorio incluye:
-* La **memoria completa del TFG**, donde se documenta en profundidad todo el proceso de diseño, la base teórica (desde el Perceptrón hasta la retropropagación) y las decisiones de implementación. Puedes consultarla en el repositorio oficial de la UPM: [Archivo Digital UPM](https://oa.upm.es/82476/). Para un análisis exhaustivo de los algoritmos, las **funciones de activación**, las **funciones de error**, los **optimizadores** y las **estructuras de datos** utilizadas, se recomienda consultar dicho documento.
-* **Manuales de uso** detallados para la librería principal (`gml_nn.h`) y sus módulos auxiliares (`matrix.h`, `data_handler.h`) en la carpeta `manual/`. Estos manuales proporcionan una guía rápida sobre la interfaz de la librería y ejemplos de código.
+- **Arbitrary architectures:** any number of layers and neurons per layer.
+- **Supervised training** with backpropagation (generalised delta rule).
+- **Activation functions:** sigmoid, tanh, LeCun's optimised sigmoid, ReLU, Leaky ReLU, softplus
+  and Heaviside step.
+- **Error functions:** mean squared error (MSE) and MSE/2.
+- **Optimisers:** stochastic, batch and mini-batch gradient descent, optionally with momentum.
+- **Custom functions:** plug in your own activation or error function; derivatives are computed
+  by finite differences.
+- **Persistence:** save a trained network to a `.nn` file and load it back.
+- **Helper modules:** `matrix.h` (matrix operations) and `data_handler.h` (CSV loading,
+  train/test split, Fisher–Yates shuffling, min-max normalisation, one-hot encoding).
 
----
+## Quick start
 
-## 1. Características Principales de GML_NN ✨
+Requirements: `gcc` (or any C99 compiler) and `make`, on GNU/Linux.
 
-* **Creación Flexible de Redes:** Permite definir arquitecturas MLP con un número arbitrario de capas y neuronas por capa.
-* **Entrenamiento Supervisado:** Implementa el algoritmo de **retropropagación** (`backpropagation`) para ajustar los pesos.
-* **Variedad de Funciones de Activación:** Incluye funciones comunes como Sigmoide, Tanh, Sigmoide Optimizado (LeCun), ReLU, Leaky ReLU y Softplus.
-* **Funciones de Error Configurables:** Implementa Error Cuadrático Medio (MSE) y su variante dividida por 2.
-* **Optimizadores:** Soporta Descenso de Gradiente Estocástico (SGD), por lotes (Batch) y mini-lotes, con opción de añadir **Momento**.
-* **Personalización:** Permite definir y usar **funciones de activación y de error personalizadas** por el usuario (calculando derivadas mediante diferencias finitas).
-* **Gestión de Modelos:** Funcionalidad para **guardar** el estado de una red entrenada en un fichero `.nn` y **cargarla** posteriormente.
-* **Modularidad:** Incluye módulos auxiliares para operaciones con **matrices (`matrix.h`)** y **manejo de datos (`data_handler.h`)** desde ficheros `.csv`.
-
----
-
-## 2. Arquitectura y Detalles Técnicos 🛠️
-
-La librería está estructurada en torno a dos `struct` principales:
-
-1.  `layer`: Representa una capa de la red, almacenando sus **pesos (`W`)**, matrices auxiliares para el entrenamiento (`dW`, `vw`, etc.) y la salida (`out`). Los pesos y sesgos se gestionan conjuntamente en una única matriz por capa para optimizar operaciones.
-2.  `neural_net`: Contiene la configuración global de la red (tasa de aprendizaje, tasa de decadencia para momento, semilla aleatoria, tamaño de lote, función de error) y un array de punteros a las `layer` que la componen.
-
-
-
-El **entrenamiento** se basa en el cálculo del gradiente del error respecto a cada peso, propagando este error desde la capa de salida hacia la de entrada. La implementación modular permite manejar diferentes funciones de activación y error sin necesidad de reescribir todo el algoritmo de retropropagación. Se utiliza la **regla delta generalizada**, adaptada para trabajar con punteros a funciones para las derivadas.
-
----
-
-## 3. Módulos Auxiliares
-
-* **`matrix.h` / `matrix.c`**: Implementa una estructura `matrix` y operaciones fundamentales (creación, liberación, acceso, suma, resta, producto matricial, producto escalar) necesarias para el *feedforward* y *backpropagation*.
-* **`data_handler.h` / `data_handler.c`**: Facilita la carga de datos desde ficheros `.csv`, separación en conjuntos de entrada/salida, división en entrenamiento/prueba, barajado (Fisher-Yates), normalización (MinMax) y transformación de clases enteras a formato binario (*one-hot encoding* adaptado).
-
----
-
-## 4. Cómo Compilar y Ejecutar Ejemplos 🚀
-
-La librería no tiene dependencias externas más allá del compilador C (gcc recomendado) y la librería matemática (`-lm`). Para compilar un ejemplo (ej. `xor.c`), puedes usar un `Makefile` similar al siguiente:
-
-```makefile
-CC = gcc
-CFLAGS = -Wall -Wextra -g -I. # Añade -I. para incluir cabeceras locales
-LDFLAGS = -lm
-SRC = matrix.c data_handler.c gml_nn.c tu_ejemplo.c # Reemplaza tu_ejemplo.c
-TARGET = tu_ejecutable # Reemplaza tu_ejecutable
-
-$(TARGET): $(SRC)
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
-
-clean:
-	rm -f $(TARGET)
+```bash
+git clone https://github.com/alvarogmendez/gml_nn.git
+cd gml_nn/test_cases
+make xor           # builds the example against the library in src/
+./xor              # learns the XOR function (accuracy 1.0)
 ```
 
-1.  Guarda el código anterior como `Makefile`.
-2.  Reemplaza `tu_ejemplo.c` y `tu_ejecutable`.
-3.  Ejecuta `make` en la terminal para compilar.
-4.  Ejecuta `./tu_ejecutable` para correr el programa.
+`make` builds every example; `make clean` removes the binaries. To use the library from your own
+program, build it once with `make -C src` and link against it:
 
-El repositorio incluye ejemplos prácticos:
-* Resolución de puertas lógicas (XOR).
-* Funciones lógicas más complejas.
-* Clasificación de puntos en 2D (incluyendo datos no lineales como espirales).
-* Predicción con datos reales (Diabetes, VIH).
-* Reconocimiento de dígitos MNIST (con resultados limitados).
+```bash
+gcc -Isrc my_program.c -Lsrc -lgml_nn -lm -o my_program
+```
 
----
+A minimal network, taken from [`test_cases/xor.c`](test_cases/xor.c):
 
-## 5. Resultados y Limitaciones 📊
+```c
+int layers[] = {2, 1};                                   // 2 hidden neurons, 1 output
+neural_net nn = nn_create(ACT_OPSIGMOID, 2, layers, 2);  // 2 inputs
+nn_set_learning_rate(&nn, 0.3);
+nn_weight_randf(&nn);
 
-La librería demuestra ser capaz de resolver problemas de clasificación lineal y no lineal con éxito en varios conjuntos de datos, logrando tasas de acierto comparables a las de otras herramientas en los datasets de Diabetes y VIH.
+parser_result data = parse_data("../datasets/xor.csv", 2);
+nn_set_training_data(nn, 4, data.data_input, data.data_output);
+train_network(nn, 80, 1, COST_TRAIN);                    // 80 epochs, print the cost every epoch
+```
 
-Sin embargo, en el problema de reconocimiento de dígitos **MNIST**, el rendimiento fue limitado (en torno al 58% en el mejor caso). La memoria del TFG identifica posibles causas:
-* Uso exclusivo de MLP (las CNNs suelen ser más adecuadas para imágenes).
-* Conectividad total entre capas.
-* Normalización MinMax podría no ser ideal para MNIST.
-* Falta de optimizadores más avanzados (como Adam, RMSProp).
-* Falta de funciones de error más específicas para clasificación multiclase (como Cross-Entropy).
+## Repository layout
 
----
+| Folder | Contents |
+|---|---|
+| `src/` | The library: `gml_nn`, `matrix` and `data_handler` (`.c` / `.h`) |
+| `test_cases/` | Examples: logic gates, XOR, 2-D spirals, 6-class problem, diabetes, HIV, MNIST |
+| `datasets/` | Data for the examples (only `xor.csv` is included — see below) |
+| `code_examples/` | Snippets used in the user manuals |
+| `experimental/` | Early prototypes (perceptron, ADALINE, first backpropagation versions) |
+| `manual/` | User manuals (PDF, Spanish) |
 
-## 6. Futuras Líneas de Trabajo 🔮
+### Datasets
 
-La memoria del TFG sugiere varias mejoras posibles:
-* Refactorizar el uso de punteros a funciones para optimizar el rendimiento.
-* Expandir el catálogo de funciones de activación y error (ej. Cross-Entropy).
-* Implementar optimizadores avanzados (Adam, RMSProp).
-* Permitir eliminar conexiones entre neuronas (redes no totalmente conectadas).
-* Añadir soporte para capas convolucionales (CNNs) y pooling.
-* Mejorar las herramientas de visualización.
+The examples read their data from `../datasets/*.csv`. Only `xor.csv` ships with the repository;
+the real-world datasets used in the thesis (diabetes, HIV/AIDS, MNIST) must be downloaded
+separately — the thesis describes each of them.
+
+## Architecture
+
+The library revolves around two `struct`s:
+
+1. **`layer`** stores the layer's weights `W` (weights and biases in a single matrix), the
+   auxiliary matrices used during training (`dW`, `vw`, …) and its output `out`.
+2. **`neural_net`** holds the global configuration — learning rate, momentum decay, random seed,
+   batch size and error function — and the array of layers.
+
+Training propagates the error gradient from the output layer back to the input using function
+pointers for the derivatives, so new activation or error functions can be added without touching
+the backpropagation algorithm.
+
+## Results and limitations
+
+The library solves linear and non-linear classification problems (logic gates, XOR, spirals) and
+reaches accuracy comparable to other tools on the diabetes and HIV datasets. On **MNIST** it stays
+around **58 %** in the best case; the thesis attributes this to:
+
+- using a fully connected MLP where convolutional networks are the right tool for images,
+- min-max normalisation, which is not ideal for pixel data,
+- the lack of advanced optimisers (Adam, RMSProp) and of a cross-entropy loss for multi-class
+  classification.
+
+## Future work
+
+- Refactor the function-pointer design for speed.
+- Cross-entropy and more activation/error functions.
+- Adam and RMSProp optimisers.
+- Sparse (not fully connected) layers, convolution and pooling.
+- Better visualisation tools.
+
+## Author
+
+Álvaro González Méndez — [alvarogmendez.es](https://alvarogmendez.es) · [LinkedIn](https://www.linkedin.com/in/alvarogmendez/)
+
+Released under the [MIT License](LICENSE).
