@@ -3,3 +3,6 @@
 
 *.csv
 *.zip
+
+*.csv
+!datasets/xor.csv
